@@ -1,3 +1,7 @@
+"""
+Note: Any change on this file take effect only after re-make.
+      Any new definition of functions should be declared in irispy.py
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as a3
@@ -42,9 +46,48 @@ def animate(self, fig=None, pause=0.5, show=True, repeat_delay=2.0):
         artists.extend(poly.draw(ax))
         artists.extend(ellipsoid.draw(ax))
         for obs in self.getObstacles():
-            artists.extend(drawing.draw_convhull(obs.T, ax, edgecolor='k', facecolor='k', alpha=0.5))
+            artists.extend(drawing.draw_convhull(obs.T, ax, edgecolor='k', facecolor='k', alpha=0.1))
         artist_sets.append(tuple(artists))
 
     ani = animation.ArtistAnimation(fig, artist_sets, interval=pause*1000, repeat_delay=repeat_delay*1000)
     if show:
         plt.show()
+    
+def show_results(self, fig=None, show=True):
+    # Check points dimension and determine the axes
+    dim = self.bounds.getDimension()
+    if dim < 2 or dim > 3:
+        raise NotImplementedError("animation is not implemented for dimension < 2 or > 3")
+    if fig is None:
+        fig = plt.figure()
+        if dim == 3:
+            ax = a3.Axes3D(fig)
+        else:
+            ax = plt.gca()
+    
+    # Determine the range of axes
+    bounding_pts = np.vstack(self.boundingPoints())
+    if bounding_pts.size > 0:
+        lb = bounding_pts.min(axis=0)
+        ub = bounding_pts.max(axis=0)
+        assert(lb.size == dim)
+        assert(ub.size == dim)
+        width = ub - lb
+        ax.set_xlim(lb[0] - 0.1 * width[0], ub[0] + 0.1 * width[0])
+        ax.set_ylim(lb[1] - 0.1 * width[1], ub[1] + 0.1 * width[1])
+        if dim == 3:
+            ax.set_zlim(lb[2] - 0.1 * width[2], ub[2] + 0.1 * width[2])
+    
+    final_poly = self.polyhedron_history[-1]
+
+    final_poly.draw(ax)
+    for obs in self.getObstacles():
+        drawing.draw_convhull(obs.T, ax, edgecolor='k', facecolor='k', alpha=0.1)
+    
+    if show:
+        plt.show()
+
+
+    
+
+

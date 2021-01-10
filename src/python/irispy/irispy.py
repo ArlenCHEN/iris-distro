@@ -28,7 +28,7 @@ Ellipsoid.draw3d = drawing.draw3d
 
 IRISDebugData.animate = irisdebugdata.animate
 IRISDebugData.iterRegions = irisdebugdata.iterRegions
-
+IRISDebugData.show_results = irisdebugdata.show_results
 
 def inflate_region(obstacles,
                    start_point_or_ellipsoid,

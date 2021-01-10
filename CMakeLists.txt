@@ -42,8 +42,8 @@ set(IRIS_DEPENDENCIES)
 if(IRIS_WITH_EIGEN)
   ExternalProject_Add(eigen3
     DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/eigen3-download"
-    URL https://bitbucket.org/eigen/eigen/get/3.3.3.tar.gz
-    URL_HASH SHA256=94878cbfa27b0d0fbc64c00d4aafa137f678d5315ae62ba4aecddbd4269ae75f
+    GIT_REPOSITORY https://github.com/eigenteam/eigen-git-mirror
+    GIT_TAG c50d586b9a43395a83e51821ebd1759d1c4668e4
     TLS_VERIFY 1
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/eigen3-src"
     CMAKE_ARGS
@@ -53,7 +53,7 @@ if(IRIS_WITH_EIGEN)
       "-DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}"
       "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
       -DEIGEN_TEST_NO_OPENGL=ON
-      -DEIGEN_TEST_NOQT=ON
+      -DEIGEN_TEST_NOQT=OFF
     BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/eigen3-build")
   ExternalProject_Get_Property(eigen3 SOURCE_DIR)
   list(INSERT CMAKE_MODULE_PATH 0 "${SOURCE_DIR}/cmake")
